@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kenya PAYE Calculator (2025)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #fefefe;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 8px;
+    }
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    label, input {
+      margin-top: 10px;
+      display: block;
+      width: 100%;
+    }
+    input {
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background-color: #3498db;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 25px;
+      background-color: #ecf0f1;
+      padding: 15px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>PAYE Calculator (2025)</h2>
+
+  <label for="taxable">Enter Taxable Income (Ksh):</label>
+  <input type="number" id="taxable" placeholder="e.g. 50000" />
+
+  <button onclick="calculatePAYE()">Calculate PAYE</button>
+
+  <div class="result" id="result" style="display: none;"></div>
+
+  <script>
+    function getPAYE(taxableIncome) {
+      const personalRelief = 2400;
+      let paye = 0;
+
+      if (taxableIncome <= 24000) {
+        paye = taxableIncome * 0.10;
+      } else if (taxableIncome <= 32333) {
+        paye = (24000 * 0.10) + ((taxableIncome - 24000) * 0.25);
+      } else if (taxableIncome <= 500000) {
+        paye = (24000 * 0.10) + (8333 * 0.25) + ((taxableIncome - 32333) * 0.30);
+      } else if (taxableIncome <= 800000) {
+        paye = (24000 * 0.10) + (8333 * 0.25) + (467667 * 0.30) + ((taxableIncome - 500000) * 0.325);
+      } else {
+        paye = (24000 * 0.10) + (8333 * 0.25) + (467667 * 0.30) + (300000 * 0.325) + ((taxableIncome - 800000) * 0.35);
+      }
+
+      paye -= personalRelief;
+      return Math.max(paye, 0);
+    }
+
+    function calculatePAYE() {
+      const taxable = parseFloat(document.getElementById("taxable").value);
+      if (isNaN(taxable) || taxable < 0) {
+        alert("Please enter a valid taxable income.");
+        return;
+      }
+
+      const paye = getPAYE(taxable);
+      document.getElementById("result").style.display = "block";
+      document.getElementById("result").innerHTML = `
+        <p><strong>Taxable Income:</strong> Ksh ${taxable.toFixed(2)}</p>
+        <p><strong>PAYE (after personal relief):</strong> <span style="color:green;"><strong>Ksh ${paye.toFixed(2)}</strong></span></p>
+      `;
+    }
+  </script>
+
+</body>
+</html>
